@@ -21,7 +21,7 @@ def get_user_anime_list():
     if response.status_code == 200:
         data = response.json()
         shrunk_data = shrink_anime_list(data)
-        with open(f"./backend/anime_recommendations/user_data/{username}_anime_list.json", "w") as f:
+        with open(f"./backend/anime_recommendations/data_fetching/data/user_data/{username}_anime_list.json", "w") as f:
             json.dump(shrunk_data, f, indent=2)
         print("Anime list saved!")
     else:
