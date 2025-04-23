@@ -1,0 +1,72 @@
+import os
+import json
+import random
+import time
+import requests
+
+# Configuration
+START_PAGE = 1
+END_PAGE = 113  # Total number of pages available
+MAX_USERUPDATE_PAGES = 100  # Number of pages to fetch for each anime (max 100)
+NUM_ANIME = 100  # Number of anime to fetch usernames from
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_FILE = os.path.join(SCRIPT_DIR, "data", "usernames", "unique_usernames.json")
+ANIME_DATA_DIR = os.path.join(SCRIPT_DIR, "data", "all_anime")
+
+# Storage
+usernames = set()
+
+def load_anime_ids():
+    anime_ids = []
+    for _ in range(NUM_ANIME):
+        random_page = random.randint(START_PAGE, END_PAGE)
+        file_path = os.path.join(ANIME_DATA_DIR, f"anime_pages_{random_page:03}.json")
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if data:
+                    random_anime = random.choice(data)
+                    mal_id = random_anime.get("mal_id")
+                    if mal_id:
+                        anime_ids.append(mal_id)
+        except Exception as e:
+            print(f"Failed to load {file_path}: {e}")
+    return anime_ids
+
+def fetch_user_updates(anime_id):
+    for page in range(1, MAX_USERUPDATE_PAGES + 1):
+        url = f"https://api.jikan.moe/v4/anime/{anime_id}/userupdates?page={page}"
+        try:
+            response = requests.get(url)
+            if response.status_code != 200:
+                print(f"Error fetching page {page} for anime {anime_id}: {response.status_code}")
+                break
+            result = response.json()
+
+            for user_entry in result.get("data", []):
+                username = user_entry.get("user", {}).get("username")
+                if username:
+                    usernames.add(username)
+
+            time.sleep(1)  # Be polite to the API
+        except Exception as e:
+            print(f"Exception fetching user updates for anime {anime_id}, page {page}: {e}")
+            break
+
+def main():
+    anime_ids = load_anime_ids()
+    print(f"Loaded {len(anime_ids)} anime IDs.")
+
+    for anime_id in anime_ids:
+        print(f"Fetching user updates for anime ID {anime_id}...")
+        fetch_user_updates(anime_id)
+        print(f"Collected usernames: {len(usernames)}")
+
+    print(f"Finished. Total unique usernames collected: {len(usernames)}")
+
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as out:
+        json.dump(sorted(list(usernames)), out, indent=2)
+    print(f"Usernames saved to {OUTPUT_FILE}")
+
+if __name__ == "__main__":
+    main()

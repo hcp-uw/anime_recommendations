@@ -2,11 +2,12 @@ import requests
 import json
 import time
 
-TOTAL_PAGES = 10
+TOTAL_PAGES = 1139
 BATCH_SIZE = 10
+START_PAGE = 100
 BASE_URL = "https://api.jikan.moe/v4/anime?page={}"
 OUTPUT_FILE_TEMPLATE = "anime_pages_{:03}.json"
-DELAY = 1.2  # Slight delay to be nice to the API (Jikan rate limit = ~2 req/sec)
+DELAY = 1  # Slight delay to be nice to the API (Jikan rate limit = ~2 req/sec)
 
 def fetch_page(page_num):
     url = BASE_URL.format(page_num)
@@ -18,7 +19,7 @@ def fetch_page(page_num):
         return []
 
 def main():
-    for start_page in range(1, TOTAL_PAGES + 1, BATCH_SIZE):
+    for start_page in range(START_PAGE, TOTAL_PAGES + 1, BATCH_SIZE):
         all_data = []
         end_page = min(start_page + BATCH_SIZE - 1, TOTAL_PAGES)
         print(f"Fetching pages {start_page} to {end_page}...")
