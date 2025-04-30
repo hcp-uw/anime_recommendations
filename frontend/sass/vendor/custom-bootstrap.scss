@@ -12,9 +12,11 @@ $custom-colors: (
     filter-border-c: #08C0E1, // Filter border
 
     // Tag colors (add more later)
-    pink: #F5C0CE,
-    dark-gray: #525553,
+    custom-pink: #F5C0CE,
+    custom-dark-gray: #525553,
 );
 
 // Merge with Bootstrap's existing colors
 $theme-colors: map-merge($theme-colors, $custom-colors);
+
+

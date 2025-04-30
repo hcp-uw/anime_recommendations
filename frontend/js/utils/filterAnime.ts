@@ -1,4 +1,4 @@
-import { Anime, FilterChange } from "../types";
+import { Anime, FilterChange, MalCategoryId } from "../types";
 
 /**
  * Filters an array of Anime based on the provided filters.
@@ -16,11 +16,11 @@ export const filterAnime = (
 
       switch (key) {
         case "includedGenres":
-          return (value as string[]).some((genre) =>
+          return (value as MalCategoryId[]).every((genre) =>
             anime.genres.includes(genre),
           );
         case "excludedGenres":
-          return !(value as string[]).some((genre) =>
+          return !(value as MalCategoryId[]).some((genre) =>
             anime.genres.includes(genre),
           );
         case "staff":

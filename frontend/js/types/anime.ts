@@ -1,5 +1,6 @@
 import { AnimeStatus } from "./animeStatus";
 import { AnimeType } from "./animeType";
+import { MalCategoryId } from "./malCategories";
 
 export type Anime = {
   id: number;
@@ -7,7 +8,7 @@ export type Anime = {
   synopsis: string;
   malUrl: string;
   imageUrl: string;
-  genres: string[];
+  genres: MalCategoryId[];
   staff: string[];
   companies: string[];
   malScore: number;

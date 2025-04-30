@@ -1,9 +1,10 @@
 import { AnimeStatus } from "./animeStatus";
 import { AnimeType } from "./animeType";
+import { MalCategoryId } from "./malCategories";
 
 export type FilterChange =
-  | { key: "includedGenres"; value: string[] }
-  | { key: "excludedGenres"; value: string[] }
+  | { key: "includedGenres"; value: MalCategoryId[] }
+  | { key: "excludedGenres"; value: MalCategoryId[] }
   | { key: "staff"; value: string[] }
   | { key: "companies"; value: string[] }
   | { key: "malScoreMin"; value: number }
@@ -18,9 +19,10 @@ export type FilterChange =
   | { key: "episodeCountMax"; value: number };
 
 // TODO: Potentially add source (LN, Game, Manga, etc. as a filter?)
+// TODO: Add user status (watching, completed, on-hold, dropped, plan to watch) as a filter?
 export type Filters = {
-  includedGenres: string[];
-  excludedGenres: string[];
+  includedGenres: MalCategoryId[];
+  excludedGenres: MalCategoryId[];
   staff: string[];
   companies: string[];
   malScoreMin: number;

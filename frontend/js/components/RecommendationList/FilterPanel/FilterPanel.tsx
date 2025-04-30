@@ -4,6 +4,8 @@ import { Accordion, Form, Button } from "react-bootstrap";
 import { animeStatuses, animeTypes } from "../../../constants";
 import { Filters, AnimeStatus, AnimeType, FilterChange } from "../../../types";
 
+import GenreInput from "./GenreInput";
+import RangeSlider from "./RangeSlider";
 import StaffInput from "./StaffInput";
 
 interface FilterPanelProps {
@@ -160,26 +162,28 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ onFilter }) => {
   return (
     <div className="filter-panel bg-filter-bg-c border-filter-border-c tz">
       <h5 className="text-offbase-black">Filters</h5>
+        {/* Apply Filters Button */}
+        <div
+        className="d-flex justify-content-center mt-3"
+        style={{ gap: "10px" }}
+      >
+        <Button variant="primary" onClick={applyFilters}>
+          Apply Filters
+        </Button>
+        <Button variant="secondary" onClick={resetFilters}>
+          Reset Filters
+        </Button>
+      </div>
       <Accordion>
         {/* Genre, Tags */}
         <Accordion.Item eventKey="0">
-          <Accordion.Header>Genre, Tags</Accordion.Header>
+          <Accordion.Header>Genre</Accordion.Header>
           <Accordion.Body>
-            {["Action", "Adventure", "Comedy", "Drama"].map((genre) => (
-              <Form.Check
-                key={genre}
-                label={genre}
-                type="checkbox"
-                onChange={(e) =>
-                  handleChange({
-                    key: "includedGenres",
-                    value: e.target.checked
-                      ? [...filters.includedGenres, genre]
-                      : filters.includedGenres.filter((g) => g !== genre),
-                  })
-                }
-              />
-            ))}
+            <GenreInput
+              excludedGenres={filters.excludedGenres}
+              includedGenres={filters.includedGenres}
+              onChange={handleChange}
+            />
           </Accordion.Body>
         </Accordion.Item>
 
@@ -217,39 +221,23 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ onFilter }) => {
         <Accordion.Item eventKey="3">
           <Accordion.Header>MAL Score</Accordion.Header>
           <Accordion.Body>
-            <Form.Label>Minimum MAL Score (1-10)</Form.Label>
-            <Form.Control
-              max="10"
-              min="1"
-              placeholder="No minimum"
-              type="number"
-              value={
-                filters.malScoreMin === -Infinity ? "" : filters.malScoreMin
+            <RangeSlider
+              initialMax={
+                filters.malScoreMax === Infinity ? 10 : filters.malScoreMax
               }
-              onChange={(e) =>
-                handleChange({
-                  key: "malScoreMin",
-                  value:
-                    e.target.value === "" ? -Infinity : Number(e.target.value),
-                })
+              initialMin={
+                filters.malScoreMin === -Infinity ? 1 : filters.malScoreMin
               }
-            />
-            <Form.Label>Maximum MAL Score (1-10)</Form.Label>
-            <Form.Control
-              max="10"
-              min="1"
-              placeholder="No maximum"
-              type="number"
-              value={
-                filters.malScoreMax === Infinity ? "" : filters.malScoreMax
-              }
-              onChange={(e) =>
-                handleChange({
-                  key: "malScoreMax",
-                  value:
-                    e.target.value === "" ? Infinity : Number(e.target.value),
-                })
-              }
+              label="MAL Score Range"
+              max={10}
+              maxDescription="Maximum Score"
+              min={1}
+              minDescription="Minimum Score"
+              step={0.5}
+              onChange={(min, max) => {
+                handleChange({ key: "malScoreMin", value: min });
+                handleChange({ key: "malScoreMax", value: max });
+              }}
             />
           </Accordion.Body>
         </Accordion.Item>
@@ -258,29 +246,23 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ onFilter }) => {
         <Accordion.Item eventKey="4">
           <Accordion.Header>Members</Accordion.Header>
           <Accordion.Body>
-            <Form.Control
-              placeholder="Enter minimum members"
-              type="number"
-              value={filters.memberMin === -Infinity ? "" : filters.memberMin}
-              onChange={(e) =>
-                handleChange({
-                  key: "memberMin",
-                  value:
-                    e.target.value === "" ? -Infinity : Number(e.target.value),
-                })
+            <RangeSlider
+              initialMax={
+                filters.memberMax === Infinity ? 1000000 : filters.memberMax
               }
-            />
-            <Form.Control
-              placeholder="Enter maximum members"
-              type="number"
-              value={filters.memberMax === Infinity ? "" : filters.memberMax}
-              onChange={(e) =>
-                handleChange({
-                  key: "memberMax",
-                  value:
-                    e.target.value === "" ? Infinity : Number(e.target.value),
-                })
+              initialMin={
+                filters.memberMin === -Infinity ? 0 : filters.memberMin
               }
+              label="Number of Members"
+              max={1000000} // Adjust this max value as needed
+              maxDescription="Maximum Members"
+              min={0}
+              minDescription="Minimum Members"
+              step={1000}
+              onChange={(min, max) => {
+                handleChange({ key: "memberMin", value: min });
+                handleChange({ key: "memberMax", value: max });
+              }}
             />
           </Accordion.Body>
         </Accordion.Item>
@@ -409,18 +391,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ onFilter }) => {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-      {/* Apply Filters Button */}
-      <div
-        className="d-flex justify-content-center mt-3"
-        style={{ gap: "10px" }}
-      >
-        <Button variant="primary" onClick={applyFilters}>
-          Apply Filters
-        </Button>
-        <Button variant="secondary" onClick={resetFilters}>
-          Reset Filters
-        </Button>
-      </div>
     </div>
   );
 };
