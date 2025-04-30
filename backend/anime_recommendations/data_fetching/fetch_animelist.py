@@ -1,8 +1,10 @@
-import requests
 import json
-from dotenv import load_dotenv
 import os
 import time
+
+import requests
+from dotenv import load_dotenv
+
 
 # Load environment variables
 load_dotenv()
@@ -17,15 +19,10 @@ USERNAMES_FILE = os.path.join(SCRIPT_DIR, "data", "usernames", "unique_usernames
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # API headers
-headers = {
-    "X-MAL-CLIENT-ID": client_id
-}
+headers = {"X-MAL-CLIENT-ID": client_id}
 
 # API parameters
-params = {
-    "fields": "list_status",
-    "limit": 1000  # max allowed per request
-}
+params = {"fields": "list_status", "limit": 1000}  # max allowed per request
 
 
 def get_user_anime_list(username):
@@ -35,7 +32,7 @@ def get_user_anime_list(username):
 
     while next_url:
         response = requests.get(next_url, headers=headers, params=params)
-        
+
         if response.status_code == 200:
             data = response.json()
             all_anime.extend(data.get("data", []))
@@ -48,7 +45,9 @@ def get_user_anime_list(username):
             print(f"❌ Skipping '{username}': User not found.")
             return None
         else:
-            print(f"🔥 Error fetching '{username}': {response.status_code} {response.text}")
+            print(
+                f"🔥 Error fetching '{username}': {response.status_code} {response.text}"
+            )
             return None
 
     return shrink_anime_list(all_anime)
@@ -59,18 +58,20 @@ def shrink_anime_list(full_data):
     for entry in full_data:
         node = entry.get("node", {})
         list_status = entry.get("list_status", {})
-        shrunk_data.append({
-            "id": node.get("id"),
-            "status": list_status.get("status"),
-            "score": list_status.get("score"),
-            "episodes_watched": list_status.get("num_episodes_watched"),
-        })
+        shrunk_data.append(
+            {
+                "id": node.get("id"),
+                "status": list_status.get("status"),
+                "score": list_status.get("score"),
+                "episodes_watched": list_status.get("num_episodes_watched"),
+            }
+        )
     return shrunk_data
 
 
 def main():
     # Load usernames
-    with open(USERNAMES_FILE, "r", encoding="utf-8") as f:
+    with open(USERNAMES_FILE, encoding="utf-8") as f:
         usernames = json.load(f)
 
     for username in usernames:
