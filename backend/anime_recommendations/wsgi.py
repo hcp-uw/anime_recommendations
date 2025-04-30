@@ -3,6 +3,8 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "anime_recommendations.settings.production")
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE", "anime_recommendations.settings.production"
+)
 
 application = get_wsgi_application()

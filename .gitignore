@@ -18,6 +18,8 @@ __pycache__/
 
 # data
 *.dump
+/backend/anime_recommendations/data_fetching/data/*
+
 
 # npm
 node_modules/

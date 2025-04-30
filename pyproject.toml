@@ -96,6 +96,8 @@ exclude = [
     "node_modules",
     "venv",
     "virtualenvs",
+    "backend/anime_recommendations/data_fetching",
+    "backend/testproject/data_fetching",
 ]
 ignore = [
   # Disable eradicate (commented code removal)
