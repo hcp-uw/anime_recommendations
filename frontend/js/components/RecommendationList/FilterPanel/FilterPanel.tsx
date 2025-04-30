@@ -162,6 +162,18 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ onFilter }) => {
   return (
     <div className="filter-panel bg-filter-bg-c border-filter-border-c tz">
       <h5 className="text-offbase-black">Filters</h5>
+        {/* Apply Filters Button */}
+        <div
+        className="d-flex justify-content-center mt-3"
+        style={{ gap: "10px" }}
+      >
+        <Button variant="primary" onClick={applyFilters}>
+          Apply Filters
+        </Button>
+        <Button variant="secondary" onClick={resetFilters}>
+          Reset Filters
+        </Button>
+      </div>
       <Accordion>
         {/* Genre, Tags */}
         <Accordion.Item eventKey="0">
@@ -379,18 +391,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ onFilter }) => {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-      {/* Apply Filters Button */}
-      <div
-        className="d-flex justify-content-center mt-3"
-        style={{ gap: "10px" }}
-      >
-        <Button variant="primary" onClick={applyFilters}>
-          Apply Filters
-        </Button>
-        <Button variant="secondary" onClick={resetFilters}>
-          Reset Filters
-        </Button>
-      </div>
     </div>
   );
 };

@@ -16,7 +16,7 @@ export const filterAnime = (
 
       switch (key) {
         case "includedGenres":
-          return (value as MalCategoryId[]).some((genre) =>
+          return (value as MalCategoryId[]).every((genre) =>
             anime.genres.includes(genre),
           );
         case "excludedGenres":
