@@ -14,9 +14,11 @@ $custom-colors: (
     // Tag colors (add more later)
     custom-pink: #F5C0CE,
     custom-dark-gray: #525553,
+
+    // Anime card colors
+    custom-blue: #ead3f2
+    // #dbaeeb
 );
 
 // Merge with Bootstrap's existing colors
 $theme-colors: map-merge($theme-colors, $custom-colors);
-
-

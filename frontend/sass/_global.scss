@@ -3,6 +3,19 @@
     font-weight: 600;
 }
 
+.flex-padding {
+    display: flexbox;
+    gap: 10px;
+}
+
+// https://stackoverflow.com/a/66371800
+.text-truncate-container {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 
 // Fonts
 .inter {
