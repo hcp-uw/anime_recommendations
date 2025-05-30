@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, Row, Col, Badge } from "react-bootstrap";
 
 import { malCategories } from "../../constants";
@@ -31,7 +30,7 @@ function ImageSection({ anime } : AnimeCardProps) {
 
 function MainSection({ anime } : AnimeCardProps) {
   return (
-    <Col md={8}>
+    <Col md={7}>
       <Card.Body >
         <Title anime={anime} />
         <Genres anime={anime} />
@@ -57,16 +56,16 @@ function Genres ( {anime} : AnimeCardProps ) {
   return (
     <Row className="py-1">
       <div className="d-flex flex-padding">
-        {anime.genres.map((genre) => ( <Genre genre={genre} />))}
+        {anime.genres.map((genre) => ( <Genre genre={genre} key={genre} />))}
       </div>
     </Row>
   )
 }
 
 
-function Genre ( {genre} : { genre: MalCategoryId } ) {
+function Genre ( {genre, key} : { genre: MalCategoryId, key: MalCategoryId } ) {
   return ( 
-    <Badge key={genre} bg="custom-blue" className="mr-1 rounded align-items-center px-2 gap-2">
+    <Badge key={key} bg="custom-blue" className="mr-1 rounded align-items-center px-2 gap-2">
       {malCategories[genre]}
     </Badge>
   );
@@ -85,17 +84,22 @@ function Synopsis ( {anime} : AnimeCardProps ) {
 function DetailsSection({ anime } : AnimeCardProps) {
   return (
     <Col
-      className="d-flex justify-content-center pe-4"
-      md={2} 
+      className="d-flex"
+      md={3} 
     >
-      <Card.Body>
+      <Card.Body className="justify-content-center pe-4">
       <Row >
-        <Badge bg="success" pill>
-          Plan to Watch
-        </Badge>
+        Recommended: %
+      </Row>
+      <Row className="py-1">
+        <div className="d-flex">
+          <Badge bg="success" pill className="mr-1 align-items-center px-3">
+            Plan to Watch
+          </Badge>
+        </div>
       </Row>
       <Row>
-        Text 
+        MAL score: {anime.malScore}
       </Row>
 
       </Card.Body>
